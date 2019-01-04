@@ -1,12 +1,18 @@
 from bs4 import BeautifulSoup
 import urllib.request
-id_number = 1000502
+import re
+import sys
+sys.setrecursionlimit(1000000000)
+with open("current_id.txt",'r') as out:
+    id_number = int((out.read()))
 def loop(id_number):
     while True:
-        if (len(str(id_number)) == 9):
-            break;
+        #if (len(str(id_number)) == 9):
+            #break;
         url = "https://play.eslgaming.com/team/matches/" + str(id_number)
-        id = url[len(url) - 8:len(url)]
+        id = re.sub('\D',"", url)
+        with open("current_id.txt", 'w') as out:
+            out.write(str(id))
         link = urllib.request.urlopen(url).read()
         game = 0
         soup = BeautifulSoup(link, 'html.parser')
